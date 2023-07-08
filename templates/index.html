@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<br>
+<h2 align="center" style=" font-family:'Times New Roman',serif ;color:chocolate;">Home</h2>
+<hr>
+<center><a href="{% url 'blog_app:createpost' %}" class="btn btn-outline-success">Create Post</a></center>
+{% if model %}
+<div class="container">
+    <div class="jumbotron">
+        <div class="row">
+            {% for i in model %}
+            <div class="col-md-12">
+                <div class="card card-body w-50" style="border: 0;">
+                    <ul style="list-style-type: none;">
+                        <li><h4 style="font-size:25px;font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif; color:darkred;">{{i.user.username}}</h4></li>
+                            {% if i.user.username == user.username%} 
+                            <div class="dropdown" style=" padding: 0px;margin: 0px;position: relative; left:200px; bottom: 37px;">
+                                <img src="{% static 'images/dots.png' %}" alt="no img" data-bs-toggle="dropdown" width="20px">
+                                <ul class="dropdown-menu">
+                                  <li><a class="dropdown-item" href="{% url 'blog_app:editpost' i.id %}">Edit</a></li>
+                                  <li><a class="dropdown-item" href="{% url 'blog_app:deletepost' i.id %}">Delete</a></li>
+                                </ul>
+                              </div>
+                            {% endif %}
+                        <li><p style="font-size:medium; font-family:Helvetica">{{i.description}}</p></li>
+                        {% if i.image %}
+                        <li><img src="{{ i.image.url }}" alt="no img" width="75%"></li>
+                        {% endif %}
+                        <li><p style="color: rgb(100, 100, 100); font-size:smaller;">{{i.date}}</p></li>
+                    </ul>
+                </div>
+                <hr><hr>
+            </div>  
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% else %}
+<center><b><h4 style="font-family:Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;">NO POSTS</h4></b></center>
+{% endif %}
+{% else %}
+<br><br>
+<center>
+<div class="container">
+    <a href="{% url 'blog_app:login' %}" class="btn btn-outline-dark">Login</a><br><br>
+    <h5>or</h5><br>
+    <a href="{% url 'blog_app:createaccount' %}" class="btn btn-outline-dark">Create Account</a>
+</div>
+</center>
+{% endif %}
+
+
+{% endblock %}
